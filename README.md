@@ -5,7 +5,7 @@ However, where there is light, there must always be shadow. Misleading, manipula
 
 That's why I've asked myself: Is there a way to use my enthusiasm for data and machine learning techniques to come up with a simple web application to help others classify Reddit posts? Turns out: Yes! There is even a whole web page (incl. publications) that focuses on the topic of Reddit post classification using multiple machine learning approaches and even provides training, test, and validation data for machine learning algorithms. Be sure to check out the awesome [Fakeddit](https://fakeddit.netlify.app) page. But, since I'm always in for some fun with machine learning, natural language processing and cloud computation stuff, I wanted to come up with a model myself. Therefore, I split this project into smaller, digestible steps:
 
-1. Clean up and prepare the Fakeddit data using **Amazon Web Services** (AWS) **SageMaker** (in theory, for larger datasets one should probably use **AWS Elastic Map Reduce (EMR)** and **Spark/Koalas**)
+1. Clean up and prepare the Fakeddit data using **Amazon Web Services (AWS) SageMaker** (in theory, for larger datasets one should probably use **AWS Elastic Map Reduce (EMR)** and **Spark/Koalas**)
 2. Specify and train/validate the model with the data also using **AWS SageMaker**
 3. Create a local dashboard around the model for easy access using **Streamlit**
 4. Wrap everything up in a **Docker** container
