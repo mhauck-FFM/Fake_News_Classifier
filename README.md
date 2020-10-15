@@ -43,6 +43,11 @@ The preprocessing of the data is also done in AWS SageMaker. I have started with
 
 ## Model training
 
+Now that we have clean data, we can work on the classification model. I decided to use a neural network with different Embedding, LSTM, Dropout, MaxPooling and Dense layers. As always with the design of neural networks, finding the exact, fine-tuned, final setup is kind of a trial and error process. I've tried various different layer combinations and complexities, but the final setup is quite simple. I also decided to incorporate a word2vec pretrained model to give the neural network some prior knowledge of word connections. The pretrained model is the Google News [Word2Vec](https://code.google.com/archive/p/word2vec/) with 300-dimensional vectors for 3 million words and phrases. The word2vec model is used in the embedding layer of the neural network.
+
+The script for the training can be found in ``/model_setup/train_reddit_classifier.py`` and the following graphic gives an overview of the model:
+![model_overview](https://github.com/mhauck-FFM/Reddit_Post_Classifier/blob/main/model/reddit_classifier_plot.png)
+
 ## Creating a Streamlit app
 
 ## Dockerizing the app
