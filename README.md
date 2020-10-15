@@ -24,10 +24,27 @@ So, let's get started and classify some Reddit posts.
 
 ## Data preparation
 
-The first task to accomplish is the data cleansing and preparation. We need to identify the most important features of the training data and extract them into a separate dataset. Additionally, we have to include the *true* labels of the Reddit posts within the training data for our model to learn. Then we have to tokenize the text into sequences of equal length which our model is able to understand. For this task, I'm using (of course) python 3.6 with pandas, keras, nltk, and pickle.
+The first task to accomplish is the data cleansing and preparation. We need to identify the most important features of the training data and extract them into a separate dataset. Additionally, we have to include the *true* labels of the Reddit posts within the training data for our model to learn. The 6 labels are:
+
+| Label                 | Index |
+| --------------------- | ----- |
+| True                  | 0     |
+| Satire/Parody         | 1     |
+| Misleading Content    | 2     |
+| Manipulated Content   | 3     |
+| False Connection      | 4     |
+| Imposter Content      | 5     |
+
+After that we have to tokenize the text into sequences of equal length which our model is able to understand. For this task, I'm using (of course) python 3.6 with pandas, keras, nltk, and pickle.
 
 For the feature selection, I've decided that I want to keep it as simple and small as possible, so we will be training the model only on the ``clean_title`` of the Reddit post and use the ``6_way_label`` as our feature the model shall predict. This is a rough approximation and might lead to some strong biases as the model could, for example, learn that shorter titles are more likely to indicate that something with the post is wrong. However, I will start small and extend the features if need be later on.
 
-The preprocessing of the data is also done on SageMaker. I have started with a fancy, fully fledged python script that was called by a driver notebook to run the preprocessing on SageMaker and create a data pipeline. However, that was a total overkill. The processing steps are quite handleable so that a single python script that just runs on the notebook instance is fully sufficient. This script can be found in ``/preprocessing/reddit_data_preprocessing.py``. What it does is it loads the data from my S3 bucket, crams them into pandas dataframes, performs the feature selection and tokenization, and loads the final processed data as json files back to S3. As I said, nothing computationally intensive. For the tokenization, I use the tokenizer that comes with keras together with the ``texts_to_sequences`` and ``pad_sequences`` functions of nltk. Note that I had to use ``lambda`` functions and the pandas ``.apply()`` method to apply these functions to the complete dataframe without using slow loops explicitly. The trained tokenizer is also saved to S3 using pickle for later use during prediction. That's it. The data are now super clean.
+The preprocessing of the data is also done in AWS SageMaker. I have started with a fancy, fully fledged python script that was called by a driver notebook to run the preprocessing on SageMaker and create a data pipeline. However, that was a total overkill. The processing steps are quite handleable so that a single python script that just runs on the notebook instance is fully sufficient. This script can be found in ``/preprocessing/reddit_data_preprocessing.py``. What it does is it loads the data from my S3 bucket, crams them into pandas dataframes, performs the feature selection and tokenization, and loads the final processed data as json files back to S3. As I said, nothing computationally intensive. For the tokenization, I use the tokenizer that comes with keras together with the ``texts_to_sequences`` and ``pad_sequences`` functions of nltk. Note that I had to use ``lambda`` functions and the pandas ``.apply()`` method to apply these functions to the complete dataframe without using slow loops explicitly. The trained tokenizer is also saved to S3 using pickle for later use during prediction. That's it. The data are now super clean.
 
 ## Model training
+
+## Creating a Streamlit app
+
+## Dockerizing the app
+
+## Deployment on AWS ECS
