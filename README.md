@@ -103,6 +103,6 @@ streamlit
 nltk
 ```
 
-Then, simple change the working directory of your terminal to the folder containing all relevant files and run ``docker build -t NAME_OF_DOCKER_CONTAINER .``. Don't forget the dot after your specified container name! You can deploy your container by using ``docker run -it --rm --name NAME_OF_DOCKER_CONTAINER -p 8501:8501 NAME_OF_DOCKER_CONTAINER``. You can choose whatever name you fancy after ``--name``, but for convenience I almost always stick to the container name. Using ``localhost:8501`` you can now enter the app without having to run the python script in the terminal. And even better: you could now push your container to any Docker repository.
+Then, simple change the working directory of your terminal to the folder containing all relevant files and run ``docker build -t NAME_OF_DOCKER_CONTAINER .``. Don't forget the dot after your specified container name! You can deploy your container by using ``docker run -it --rm --name NAME_OF_DOCKER_CONTAINER -p 8501:8501 NAME_OF_DOCKER_CONTAINER``. You can choose whatever name you fancy after ``--name``, but for convenience I almost always stick to the container name. Using ``localhost:8501`` you can now enter the app without having to run the python script in the terminal. And even better: you could now push your container to any Docker repository. That is exactly what we are going to do in the final step.
 
 ## Deployment on AWS ECS

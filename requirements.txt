@@ -1,0 +1,10 @@
+tensorflow
+keras
+matplotlib
+bs4
+requests
+lxml
+numpy==1.18.5
+pandas
+streamlit
+nltk
