@@ -60,10 +60,49 @@ With Streamlit we can create an application in under 100 cleanly formatted (**!*
 
 Then, the app should *print* the *title* of the post (for convenience) together with the *probability* of the most likely category. And, of course, the *category name* as well. Finally, I would like to see the probability of all categories in a nifty *bar chart* below the printing part. So, we are going to add that, too. To increase the performance of the app, the model and tokenizer, which are essential for the predictions, are cached on the page. The code of the Streamlit app is stored in ``reddit_classifier_app.py``. And, et voilà, our app is done. We can test the app by running the underlying script in the console and access it via a browser under ``localhost:8501``. Works just fine.
 
-Here is a picture of the app with an arbitrary Reddit post from [/r/theonion](https://www.reddit.com/r/theonion/). Of course, all The Onion posts are satire, which the model clearly detects:
+Here is a picture of the app with an arbitrary Reddit post from [/r/theonion](https://www.reddit.com/r/TheOnion/comments/jazpb3/report_amtrak_loses_100_million_annually_to_route/). Of course, all The Onion posts are satire, which the model clearly detects:
 
 ![App_Example](https://github.com/mhauck-FFM/Reddit_Post_Classifier/blob/main/App_Example.png)
 
 ## Dockerizing the app
+
+We are getting very close to the deployment of the app now. By now, Streamlit only runs in local mode and only if we open a specific terminal to run the script. For test purposes, this might be sufficient, but for real application it is not suitable. The best option is to create a web server, which runs the whole program. However, the app requires not only one script, but multiple files and python modules. And as a windows user I know just the perfect solution to this problem: Docker. Docker allows us to create a container, which contains (obviously) all files and programs our app needs to run. And all that in an easily deployable environment. Awesome, right? I know, I've been a fan of Docker ever since I first used it. To turn the Streamlit app and related files into a Docker container, we need two files: ``Dockerfile`` and ``requirements.txt``. The first one tells Docker what to do and the second one which python modules we want to include.
+
+The ``Dockerfile`` looks as follows:
+```
+FROM python:3.6
+EXPOSE 8501
+WORKDIR /app
+COPY reddit_classifier_app.py ./reddit_classifier_app.py
+COPY requirements.txt ./requirements.txt
+COPY ./model/fake_news_classifier.h5 ./model/fake_news_classifier.h5
+COPY ./helpers/tokenize_text.py	./helpers/tokenize_text.py
+COPY ./helpers/tokenizer_reddit.pkl ./helpers/tokenizer_reddit.pkl
+
+RUN pip3 install -r requirements.txt
+RUN python -m nltk.downloader punkt
+
+CMD streamlit run reddit_classifier_app.py \
+	--server.headless true \
+    --browser.serverAddress="0.0.0.0" \
+    --server.enableCORS true \
+    --browser.gatherUsageStats false
+```
+
+and the ``requirements.txt`` as follows:
+```
+tensorflow
+keras
+matplotlib
+bs4
+requests
+lxml
+numpy==1.18.5
+pandas
+streamlit
+nltk
+```
+
+Then, simple change the working directory of your terminal to the folder containing all relevant files and run ``docker build -t NAME_OF_DOCKER_CONTAINER .``. Don't forget the dot after your specified container name! You can deploy your container by using ``docker run -it --rm --name NAME_OF_DOCKER_CONTAINER -p 8501:8501 NAME_OF_DOCKER_CONTAINER``. You can choose whatever name you fancy after ``--name``, but for convenience I almost always stick to the container name. Using ``localhost:8501`` you can now enter the app without having to run the python script in the terminal. And even better: you could now push your container to any Docker repository.
 
 ## Deployment on AWS ECS
