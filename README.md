@@ -17,11 +17,9 @@ But, since I'm always in for some fun with machine learning, natural language pr
 Note that I used these resources to help me with the development, especially the deployment in AWS ECS: [[1]](https://github.com/nicolasmetallo/legendary-streamlit-demo), [[2]](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/url-shortener), [[3]](https://dev.to/paulkarikari/build-train-and-deploy-tensorflow-deep-learning-models-on-amazon-sagemaker-a-complete-workflow-guide-495i), [[4]](https://aws-blog.de/2020/03/building-a-fargate-based-container-app-with-cognito-authentication.html), [[5]](https://blog.usejournal.com/using-nlp-to-detect-fake-news-289314fb9198).
 
 
-Here is an overview of what I have in mind:
+So, let's get started and classify some Reddit posts. Here is an overview of what I have in mind:
 
 ![Reddit_Classifier_Overview](https://github.com/mhauck-FFM/Reddit_Post_Classifier/blob/main/Overview_Diagram.png)
-
-So, let's get started and classify some Reddit posts.
 
 ## Data preparation
 
@@ -52,11 +50,15 @@ The script for the training can be found in ``/model_setup/train_reddit_classifi
 
 For the activation functions of the LSTM layers I tested different approaches ('relu', 'tanh', 'sigmoid', ...), but a linear activation lead to the best performance during both training and testin. Note that I used the dataset called "test" as ``validation_data`` for fitting the model since in my thinking I test the performance of the model during the fitting and validate it afterwards. However, it doesn't really matter if using validation or test for that purpose. Just use one of it and NOT the training data!
 
-The training process is done using a driver notebook that calls the script in ``/model_setup/train_reddit_classifier.py`` and creates a fully automated SageMaker training job that spins up the parsed instances, performs the training and saves the model to S3. Theoretically, we could even use SageMaker to deploy the model. But there are other tools that are suitable for that purpose (see below or above). I'm training the model for 20 epochs with a batch size of 16384 (a.k.a. 2^14). This might seem pretty large for a batch, but remember that we have almost 900000 rows in our training data that need to be processed in every epoch. Additionally, I wanted to keep it simple and cheap! After 20 epochs we achieve an accuracy of circa **94 %** during training and **92 %** during testing, which is not bad for such a relatively simple construct. The model is saved to S3 and amounts approximately 400 MB of space.
+The training process is done using a driver notebook that calls the script in ``/model_setup/train_reddit_classifier.py`` and creates a fully automated SageMaker training job that spins up the parsed instances, performs the training and saves the model to S3. Theoretically, we could even use SageMaker to deploy the model. But there are other tools that are suitable for that purpose (see below or above). I'm training the model for 20 epochs with a batch size of 16384 (a.k.a. 2^14). This might seem pretty large for a batch, but remember that we have almost 900000 rows in our training data that need to be processed in every epoch. Additionally, I wanted to keep it simple and cheap! After 20 epochs we achieve an accuracy of circa **94 %** during training and **92 %** during testing, which is not bad for such a relatively simple construct. The model is saved to S3 and amounts approximately 340 MB of space.
 
 ## Creating a Streamlit app
 
-With the completion of the model training, we can now think about making predictions. 
+With the completion of the model training, we can now think about making predictions. Theoretically, I could just write a short python script where the title of the Reddit post is parsed and the probability for each category is returned to the console. **Spoiler alert**: this is what I did to test the general applicability of the new model and it works solidly. But of course, this is not the best way to deploy such a model, especially for users without any programming experience. So, we need to build an app for the model. And luckily, there is a python module that makes the development of web-based applications very smooth, even smoother than dash/plotly. I'm talking about the awesome [Streamlit](https://www.streamlit.io/).
+
+With Streamlit we can create an application in under 100 cleanly formatted (**!**) rows of python code. But first, let's think about what features the app should have? Clearly, we need an *input box* where users can enter the title of the desired Reddit post they want to have classified. A neat extension would be the possibility to parse direct weblinks to the post and the app gets the title automatically. This is relatively simple considering the beautifulsoup library in python. And yes, I'm aware that there is a whole API for Reddit in python, but as always: keep it short and keep it simple.
+
+Then, the app should *print* the *title* of the post (for convenience) together with the *probability* of the most likely category. And, of course, the *category name* as well. Finally, I would like to see the probability of all categories in a nifty *bar chart* below the printing part. So, we are going to add that, too. To increase the performance of the app, the model and tokenizer, which are essential for the predictions, are cached on the page. The code of the Streamlit app is stored in ``reddit_classifier_app.py``.
 
 ## Dockerizing the app
 
