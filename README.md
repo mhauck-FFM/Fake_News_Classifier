@@ -14,8 +14,10 @@ That's why I've asked myself: Is there a way to use my enthusiasm for data and m
 
 Note that I used these resources to help me with the development, especially the deployment in AWS ECS: [[1]](https://github.com/nicolasmetallo/legendary-streamlit-demo), [[2]](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/url-shortener), [[3]](https://dev.to/paulkarikari/build-train-and-deploy-tensorflow-deep-learning-models-on-amazon-sagemaker-a-complete-workflow-guide-495i), [[4]](https://aws-blog.de/2020/03/building-a-fargate-based-container-app-with-cognito-authentication.html), [[5]](https://blog.usejournal.com/using-nlp-to-detect-fake-news-289314fb9198).
 
+
+Here is an overview of what I have in mind:
 ![Reddit_Classifier_Overview](https://github.com/mhauck-FFM/Reddit_Post_Classifier/blob/main/Overview_Diagram.png)
 
-So, let's classify some Reddit posts.
+So, let's get started and classify some Reddit posts.
 
 ## Data preparation and model training
