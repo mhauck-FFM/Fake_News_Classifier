@@ -58,7 +58,10 @@ With the completion of the model training, we can now think about making predict
 
 With Streamlit we can create an application in under 100 cleanly formatted (**!**) rows of python code. But first, let's think about what features the app should have? Clearly, we need an *input box* where users can enter the title of the desired Reddit post they want to have classified. A neat extension would be the possibility to parse direct weblinks to the post and the app gets the title automatically. This is relatively simple considering the beautifulsoup library in python. And yes, I'm aware that there is a whole API for Reddit in python, but as always: keep it short and keep it simple.
 
-Then, the app should *print* the *title* of the post (for convenience) together with the *probability* of the most likely category. And, of course, the *category name* as well. Finally, I would like to see the probability of all categories in a nifty *bar chart* below the printing part. So, we are going to add that, too. To increase the performance of the app, the model and tokenizer, which are essential for the predictions, are cached on the page. The code of the Streamlit app is stored in ``reddit_classifier_app.py``.
+Then, the app should *print* the *title* of the post (for convenience) together with the *probability* of the most likely category. And, of course, the *category name* as well. Finally, I would like to see the probability of all categories in a nifty *bar chart* below the printing part. So, we are going to add that, too. To increase the performance of the app, the model and tokenizer, which are essential for the predictions, are cached on the page. The code of the Streamlit app is stored in ``reddit_classifier_app.py``. And, et voilà, our app is done. We can test the app by running the underlying script in the console and access it via a browser under ``localhost:8501``. Works just fine.
+
+Here is a picture of the app with an arbitrary Reddit post from [/r/theonion](https://www.reddit.com/r/theonion/). Of course, all The Onion posts are satire, which the model clearly detects:
+![App_Example](https://github.com/mhauck-FFM/Reddit_Post_Classifier/blob/main/App_Example.png)
 
 ## Dockerizing the app
 
