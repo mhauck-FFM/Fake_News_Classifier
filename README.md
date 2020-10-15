@@ -83,7 +83,7 @@ RUN pip3 install -r requirements.txt
 RUN python -m nltk.downloader punkt
 
 CMD streamlit run reddit_classifier_app.py \
-	--server.headless true \
+	  --server.headless true \
     --browser.serverAddress="0.0.0.0" \
     --server.enableCORS true \
     --browser.gatherUsageStats false
@@ -103,6 +103,14 @@ streamlit
 nltk
 ```
 
-Then, simple change the working directory of your terminal to the folder containing all relevant files and run ``docker build -t NAME_OF_DOCKER_CONTAINER .``. Don't forget the dot after your specified container name! You can deploy your container by using ``docker run -it --rm --name NAME_OF_DOCKER_CONTAINER -p 8501:8501 NAME_OF_DOCKER_CONTAINER``. You can choose whatever name you fancy after ``--name``, but for convenience I almost always stick to the container name. Using ``localhost:8501`` you can now enter the app without having to run the python script in the terminal. And even better: you could now push your container to any Docker repository. That is exactly what we are going to do in the final step.
+Then, simply change the working directory of your terminal to the folder containing all relevant files and run ``docker build -t NAME_OF_DOCKER_CONTAINER .``. Don't forget the dot after your specified container name! You can deploy your container by using ``docker run -it --rm --name NAME_OF_DOCKER_CONTAINER -p 8501:8501 NAME_OF_DOCKER_CONTAINER``. You can choose whatever name you fancy after ``--name``, but for convenience I almost always stick to the container name. Using ``localhost:8501`` you can now enter the app without having to run the python script in the terminal. And even better: you could now push your container to any Docker repository. That is exactly what we are going to do in the final step.
 
 ## Deployment on AWS ECS
+
+For our final deployment of the app, we only need to do only a few more steps. First, we push our newly created Docker container to the AWS Elastic Container Registry. Note that you have to tag your local container properly following the AWS [guidelines](https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-push-ecr-image.html). For that, you need to authenticate your local Docker distribution with your AWS account. Again, follow the AWS [guidelines](https://docs.aws.amazon.com/AmazonECR/latest/userguide/Registries.html#registry_auth).
+
+The next step was the one that was extremely new for me and took a whole lot of time to complete. But, getting it done and seeing your app for the first time publicly available is so satisfying. And I learned many useful new things along the way. So, don't be afraid. We are going to deploy the app using AWS Elastic Container Service on a Fargate Serverless Service. That is different from a deployment on a single EC2 instance, as we don't have to care about setting up the infrastructure by hand and especially the monitoring of the instance(s). Therefore, Fargate uses a so-called Application Load Balancer (ALB) to spin up EC2 instance(s) and handle all security and monitoring settings. If more computing power is necessary, the ALB will take care of it. For the ALB, we need to setup a ECS Service and Task. That sounds like a lot of work, but I'm using a neat toolkit to deploy all that stuff using python: the AWS Cloud Development Kit (CDK) - also known as Infrastructure as Code (IaC).
+
+CDK creates a stack in which you specify the AWS VPC, Fargate Service, and Task and sets everything up - ready to go for you. Just look at this awesome [tutorial](https://aws-blog.de/2020/03/building-a-fargate-based-container-app-with-cognito-authentication.html). I'm not going to show some code here, as it really helps to get your hands on it to understand what happens with your code.
+
+That's it! Our app now runs in the cloud and can be accessed using the public IP address of the Load Balancer. Theoretically, we could assign a specific fancy domain (e.g., www.raymond-reddifier.com) for the app and route it to the ALB IP using Route 53. And even more fancy, we can use AWS Cognito to implement user authentication. But, that is of course charged separately by AWS.
