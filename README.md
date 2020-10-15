@@ -12,7 +12,7 @@ That's why I've asked myself: Is there a way to use my enthusiasm for data and m
 5. Push the container to the **AWS Elastic Container Registry (ECR)** and deploy the app using the **AWS Elastic Container Service (ECS)** and **Application Load Balancer (ALB)**
 6. OPTIONAL: Use **AWS Route 53** and **AWS Cognito** for secure user authentication
 
-Note that I used these resources to help me with the development, especially the deployment in AWS ECS: [[1]](https://github.com/nicolasmetallo/legendary-streamlit-demo), [[2]](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/url-shortener), [[3]](https://dev.to/paulkarikari/build-train-and-deploy-tensorflow-deep-learning-models-on-amazon-sagemaker-a-complete-workflow-guide-495i), [[4]](https://blog.usejournal.com/using-nlp-to-detect-fake-news-289314fb9198).
+Note that I used these resources to help me with the development, especially the deployment in AWS ECS: [[1]](https://github.com/nicolasmetallo/legendary-streamlit-demo), [[2]](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/url-shortener), [[3]](https://dev.to/paulkarikari/build-train-and-deploy-tensorflow-deep-learning-models-on-amazon-sagemaker-a-complete-workflow-guide-495i), [[4]](https://aws-blog.de/2020/03/building-a-fargate-based-container-app-with-cognito-authentication.html), [[5]](https://blog.usejournal.com/using-nlp-to-detect-fake-news-289314fb9198).
 
 So, let's classify some Reddit posts.
 
