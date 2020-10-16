@@ -11,7 +11,7 @@ RUN pip3 install -r requirements.txt
 RUN python -m nltk.downloader punkt
 
 CMD streamlit run reddit_classifier_app.py \
-	--server.headless true \
+		--server.headless true \
     --browser.serverAddress="0.0.0.0" \
     --server.enableCORS true \
     --browser.gatherUsageStats false
